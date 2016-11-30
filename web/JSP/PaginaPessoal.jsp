@@ -65,10 +65,7 @@
                             <button id="button">Start uploading</button>
                             <span id="display"></span>
                             
-                            <script type="text/javascript"> 
-                                 var progressBar = getElementbyi
-                            </script>
-                                
+                          
                             
                             
                             <form action="PaginaPessoal" method="post" enctype="multipart/form-data">
