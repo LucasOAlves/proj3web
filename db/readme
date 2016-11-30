@@ -1,0 +1,15 @@
+Banco de Dados foi construído com as seguintes estruturas:
+
+usuário: murilo
+senha do usuário: murilo
+Banco de Dados: proj2web
+	tabelas:
+	data
+	usertable
+
+para realizar a recuperação do backup executar as seguintes linhas de comando
+$ psql CREATE DATABASE proj2web;
+$ psql proj2web < backupBanco
+
+Obs: no terminal deve-se redirecionar para a pasta /Projeto2Web/db/ para poder acessar o arquivo backupBanco
+
