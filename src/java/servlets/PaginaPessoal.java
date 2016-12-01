@@ -59,12 +59,18 @@ public class PaginaPessoal extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         UsuarioDAO userDao = new UsuarioDAO();
         if(request.getSession().getAttribute("login")==null){
             response.sendRedirect("Login");
             return;
         }
-        request.getRequestDispatcher("JSP/PaginaPessoal.jsp").forward(request, response);
+        if(request.getParameter("search")!=null){
+            response.getWriter().write(userDao.liveSearch(request.getSession().getAttribute("login").toString(), request.getParameter("search").toString()));
+        } else {
+            request.getRequestDispatcher("JSP/PaginaPessoal.jsp").forward(request, response);
+        }
     }
 
     /**

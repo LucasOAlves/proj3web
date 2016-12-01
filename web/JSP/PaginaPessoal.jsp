@@ -10,9 +10,26 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.js"></script>
+        <script>
+            function liveSearch(currentSearch){
+                if(currentSearch.length == 0){
+                    document.getElementById("livesearch").innerHTML = "";
+                    document.getElementById("livesearch").style.border = "0px";
+                }
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function (){
+                    if(this.readyState === 4 && this.status === 200){
+                        document.getElementById("livesearch").innerHTML = this.responseText;
+                    }
+                };
+                xhttp.open("GET","PaginaPessoal?search="+currentSearch,true);
+                xhttp.send(null);
+            }
+        </script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="CSS/paginapessoal.css">
-        <title>Login</title>
+        <title>Página Pessoal</title>
     </head>
     <body>
         <div class="header">
@@ -40,7 +57,9 @@
                     <div class="centerBoxWrapper" id="searchBox">
                         <h1 class="carousel_item-title">Página Pessoal</h1>
                         <form action="PaginaPessoal" method="get">
-                            Busca: <input type="search" name="busca" placeholder="Buscar dados">
+                            Busca: <input id="inputBusca" type="search" name="busca" placeholder="Buscar dados" list="livesearch" autocomplete="off">
+                            <datalist id="livesearch">                                    
+                            </datalist>
                             <input type="submit" value="Buscar" class="buttons_small" style="padding-bottom: 4px; padding-top: 8px;">
                         </form>
                         <span class="centerBox"><a href="#SENDFILE" class="buttons_small">Enviar Arquivo</a>   <a href="#SENDTEXT" class="buttons_small">Enviar Texto</a></span><br><br>
@@ -179,5 +198,10 @@
 			</div>
 		</footer>
 	</div>
+        <script>
+            $('#inputBusca').bind('input', function() {
+                liveSearch($(this).val());
+            });
+        </script>
     </body>
 </html>
