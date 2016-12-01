@@ -222,6 +222,31 @@ public class UsuarioDAO {
         return null;
     }
     
+    public String liveSearch(String user, String query){
+        try{
+            Class.forName("org.postgresql.Driver");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
+            String sql = "SELECT description FROM data WHERE login LIKE ? AND description ILIKE ? ORDER BY id DESC;";
+            ppst = con.prepareStatement(sql);
+            ppst.setString(1, user);
+            ppst.setString(2, "%"+query+"%");
+            ResultSet rs = ppst.executeQuery();
+            /*String out = "<ul>";
+            while(rs.next()){
+                out += "<li>"+rs.getString("description")+"</li>";
+            }
+            return out+"</ul>";*/
+            String out = "";
+            while(rs.next()){
+                out += "<option value=\""+rs.getString("description")+"\">";
+            }
+            return out;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return "";
+    }
+    
     public String buscaFiles(String user, String query, String path){
         try{
             Class.forName("org.postgresql.Driver");
