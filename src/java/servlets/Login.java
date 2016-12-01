@@ -1,3 +1,5 @@
+package servlets;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -7,6 +9,7 @@
 import dao.UsuarioDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -58,14 +61,18 @@ public class Login extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         UsuarioDAO userDao = new UsuarioDAO();
         try (PrintWriter out = response.getWriter()) {
-            if(userDao.logar(request.getParameter("login"), request.getParameter("senha"))){
-                request.getSession().setAttribute("login", request.getParameter("login"));
+            System.out.println("Name: "+request.getParameter("name")+" Senha: "+request.getParameter("password"));
+            if(userDao.logar(request.getParameter("name"), request.getParameter("password"))){
+                request.getSession().setAttribute("login", request.getParameter("name"));
                 response.sendRedirect("PaginaPessoal");
-            }else{
-                request.setAttribute("invalidAccess", true);
-                request.getRequestDispatcher("JSP/Login.jsp").forward(request, response);
+            } else {
+                out.write("false");
+                out.flush();
+                request.getSession().setAttribute("invalidAccess", true);
             }
         }
     }
