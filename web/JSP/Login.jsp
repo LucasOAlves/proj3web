@@ -12,6 +12,23 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="CSS/login.css">
         <title>Login</title>
+        <script>
+            function attemptToLogIn(name, password){
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function (){
+                    if(this.readyState === 4 && this.status === 200){
+                        if(this.responseText.localeCompare("false")===0){
+                            document.getElementById("invalidAttempt").innerHTML = "Acesso negado!! Verifique o nome de usuário e senha";
+                        } else {
+                            window.location.href = "PaginaPessoal";
+                        }
+                    }
+                };
+                xhttp.open("POST","Login",true);
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=UTF-8");
+                xhttp.send("name="+name+"&password="+password);
+            }
+        </script>
     </head>
     <body>
         <div class="header">
@@ -37,34 +54,33 @@
 			<div class="carousel_item-content-inner">
 				<h1 class="carousel_item-title">Login Pottermore</h1>
                                 <div class="div-form">
-                                    <form action="Login" method="post" accept-charset="utf-8">
+                                    <!--<form id="loginForm" action="Login" method="post" accept-charset="utf-8">-->
                                         <table class="loginTable">
                                             <tr>
                                                 <td style="text-align:right;"><span class="h2_login">Usuário:</span></td>
-                                                <td><input type="text" name="login" placeholder="Insira o seu login" required="required"></td>
+                                                <td><input type="text" id="inputName" name="login" placeholder="Insira o seu login" required="required"></td>
                                                 </tr>
                                             <tr>
                                                 <td style="text-align:right;"><span class="h2_login">Senha:</span></td>
-                                                <td><input type="password" name="senha" placeholder="Insira a sua senha" required="required"></td>
+                                                <td><input type="password" id="inputSenha" name="senha" placeholder="Insira a sua senha" required="required"></td>
                                             </tr>
-                                            <c:if test="${invalidAccess==true}">
-                                                <tr>
-                                                    <td>                                                        
-                                                    </td>
-                                                    <td>
-                                                        Login ou senha inválidos! Tente novamente
-                                                    </td>
-                                                </tr>
-                                            </c:if>
+                                            <tr>
+                                                <td>                                                        
+                                                </td>
+                                                <td id="invalidAttempt">
+                                                    
+                                                </td>
+                                            </tr>
                                         </table>
                                         <div>
-                                            <input type="submit" value="Logar" class="buttons">
+                                            <button id="loginButton" class="buttons" onclick="">Logar</button>
+                                            <!--<input type="submit" value="Logar" class="buttons">-->
                                         </div>
                                         <div style="position: relative;">
                                             <h2 class="carousel_item-subtitle">Ainda não tem uma conta?</h2>
                                             <a href=Inscrevase class="buttons">Inscreva-se</a>
                                         </div>
-                                    </form>
+                                    <!--</form>-->
                                 </div>
 			</div>	
 		</div>
@@ -128,5 +144,10 @@
 			</div>
 		</footer>
 	</div>
+        <script type="text/javascript" charset="utf-8">
+            document.getElementById("loginButton").addEventListener("click", function () {
+                attemptToLogIn(document.getElementById("inputName").value, document.getElementById("inputSenha").value);
+            });
+        </script>>
     </body>
 </html>

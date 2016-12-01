@@ -17,10 +17,12 @@ import java.sql.ResultSet;
 public class UsuarioDAO {
     private Connection con;
     private PreparedStatement ppst;
+    private final String username = "murilo";
+    private final String password = "murilo";
     public boolean logar(String login, String senha){
         try{
             Class.forName("org.postgresql.Driver");
-            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", "postgres", "0");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
             String sql = "SELECT * FROM usertable WHERE login LIKE ? AND senha LIKE ?;";
             ppst = con.prepareStatement(sql);
             ppst.setString(1, login);
@@ -41,7 +43,7 @@ public class UsuarioDAO {
     public boolean insereUsuario(String nome, String email, String login, String senha, String estado, String cidade, String bairro, String rua, String numero) {
         try{
             Class.forName("org.postgresql.Driver");
-            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", "postgres", "0");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
             String sql = "INSERT INTO usertable VALUES (?,?,?,?,?,?,?,?,?);";
             ppst = con.prepareStatement(sql);
             ppst.setString(1, nome);
@@ -66,7 +68,7 @@ public class UsuarioDAO {
     public String getNextDataId(String user){
         try{
             Class.forName("org.postgresql.Driver");
-            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", "postgres", "0");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
             String sql = "SELECT * FROM data WHERE login LIKE ? ;";
             ppst = con.prepareStatement(sql);
             ppst.setString(1, user);
@@ -86,7 +88,7 @@ public class UsuarioDAO {
     public String getImages(String user){
         try{
             Class.forName("org.postgresql.Driver");
-            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", "postgres", "0");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
             String sql = "SELECT * FROM data WHERE login LIKE ? AND type LIKE ?;";
             ppst = con.prepareStatement(sql);
             ppst.setString(1, user);
@@ -108,7 +110,7 @@ public class UsuarioDAO {
     public boolean insereData(int id, String user, String file, String fileOldName, String type, String description) {
         try{
             Class.forName("org.postgresql.Driver");
-            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", "postgres", "0");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
             String sql = "INSERT INTO data VALUES (?,?,?,?,?,?);";
             ppst = con.prepareStatement(sql);
             ppst.setInt(1, id);
@@ -129,7 +131,7 @@ public class UsuarioDAO {
     public String listFiles(String user){
         try{
             Class.forName("org.postgresql.Driver");
-            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", "postgres", "0");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
             String sql = "SELECT * FROM data WHERE login LIKE ?;";
             ppst = con.prepareStatement(sql);
             ppst.setString(1, user);
@@ -162,7 +164,7 @@ public class UsuarioDAO {
     public String displayFiles(String user){
         try{
             Class.forName("org.postgresql.Driver");
-            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", "postgres", "0");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
             String sql = "SELECT * FROM data WHERE login LIKE ?;";
             ppst = con.prepareStatement(sql);
             ppst.setString(1, user);
@@ -202,7 +204,7 @@ public class UsuarioDAO {
     public String buscaFiles(String user, String query, String path){
         try{
             Class.forName("org.postgresql.Driver");
-            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", "postgres", "0");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
             String sql = "SELECT * FROM data WHERE login LIKE ? AND description ILIKE ? ORDER BY id DESC;";
             ppst = con.prepareStatement(sql);
             ppst.setString(1, user);
@@ -278,7 +280,7 @@ public class UsuarioDAO {
     public boolean removeData(String file) {
         try{
             Class.forName("org.postgresql.Driver");
-            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", "postgres", "0");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
             String sql = "DELETE FROM data WHERE file LIKE ?";
             ppst = con.prepareStatement(sql);
             ppst.setString(1, file);

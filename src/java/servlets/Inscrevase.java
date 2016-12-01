@@ -8,7 +8,6 @@ package servlets;
 
 import dao.UsuarioDAO;
 import java.io.IOException;
-import java.util.Enumeration;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -80,5 +79,6 @@ public class Inscrevase extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
+
+
