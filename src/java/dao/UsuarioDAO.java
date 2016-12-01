@@ -17,8 +17,8 @@ import java.sql.ResultSet;
 public class UsuarioDAO {
     private Connection con;
     private PreparedStatement ppst;
-    private final String username = "murilo";
-    private final String password = "murilo";
+    private final String username = "postgres";
+    private final String password = "0";
     public boolean logar(String login, String senha){
         try{
             Class.forName("org.postgresql.Driver");
@@ -40,6 +40,27 @@ public class UsuarioDAO {
         return false;
     }
 
+    public boolean verificaUnique(String campo, String valor){
+        try{
+            Class.forName("org.postgresql.Driver");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
+            String sql = "SELECT * FROM usertable where ? like ?";
+            ppst = con.prepareStatement(sql);
+            ppst.setString(1, campo);
+            ppst.setString(2, valor);
+            ResultSet rs = ppst.executeQuery();
+            if(rs.next()){
+                con.close();
+                return true;
+            }
+            con.close();
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+        
     public boolean insereUsuario(String nome, String email, String login, String senha, String estado, String cidade, String bairro, String rua, String numero) {
         try{
             Class.forName("org.postgresql.Driver");

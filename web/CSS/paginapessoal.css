@@ -126,7 +126,6 @@ li {
 .main_article {
 	margin-top: -133px;
 	width: 100%;
-	height: 620px;
 	background: url(https://my.pottermore.com/assets/img/join-background.jpg) no-repeat;
         background-size: cover; 
 }
@@ -307,10 +306,8 @@ li {
     
 }
 .carousel_item-content-inner{
-    height: 520px;
     margin-top: 100px;
     width: 100%;
-    overflow-y: scroll;
 }
 .carousel_item-title{
     margin-bottom: 20px;
@@ -552,7 +549,7 @@ input[placeholder]{
 		border-radius: 35px;
 	}
 	.carousel_item-content-inner{
-		width: 59.32203%;
+		width: 100%;
 	}
 }
 

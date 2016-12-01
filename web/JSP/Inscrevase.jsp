@@ -107,7 +107,7 @@
                                                 <td>
                                                 </td>
                                                 <td>
-                                                    <label style="display :none" id="labelInvalid">Erro ao inserir, tente novamente!</label>
+                                                    <label style="display :block" id="labelInvalid"></label>
                                                 </td>
                                             </tr>
                                         </table>
@@ -202,11 +202,11 @@
                 xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded;charset=UTF-8");
                 xmlhttp.onreadystatechange = function (){
                     if(this.readyState === 4 && this.status === 200){
-                        alert(this.responseText);
-                        if (this.responseText === "false"){
-                            document.getElementById("labelInvalid").style.display = "block";
+                        var obj = JSON.parse(this.responseText);
+                        if (obj.result === "false"){
+                            document.getElementById("labelInvalid").innerHTML = obj.erro;
                         } else {           
-                            window.location.href = "Login";
+                            window.location.href = obj.url;
                         }
                     }
                 };

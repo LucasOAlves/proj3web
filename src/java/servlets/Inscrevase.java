@@ -63,10 +63,34 @@ public class Inscrevase extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         UsuarioDAO userDao = new UsuarioDAO(); 
         if(userDao.insereUsuario(request.getParameter("nome"),request.getParameter("email"),request.getParameter("login"),request.getParameter("senha"),request.getParameter("estado"),request.getParameter("cidade"),request.getParameter("bairro"),request.getParameter("rua"),request.getParameter("numero"))){
-            response.getWriter().write("true");
+            response.getWriter().write("{\"url\":\"Login\",\"result\":\"true\"}");
             response.getWriter().flush();
-        } else {
-            response.getWriter().write("false");
+        } else if(userDao.verificaUnique("email",request.getParameter("email"))){
+            response.getWriter().write("{\"erro\":\"Email já utilizado\",\"result\":\"false\"}");
+            response.getWriter().flush();
+        } else if(userDao.verificaUnique("login", request.getParameter("login"))){
+            response.getWriter().write("{\"erro\":\"Login já utilizado\",\"result\":\"false\"}");
+            response.getWriter().flush();
+        }else if((request.getParameter("nome").equals(""))){
+            response.getWriter().write("{\"erro\":\"Nome vazio\",\"result\":\"false\"}");
+            response.getWriter().flush();
+        } else if(request.getParameter("senha").length() <=8){
+            response.getWriter().write("{\"erro\":\"Senha menor que 8 digitos\",\"result\":\"false\"}");
+            response.getWriter().flush();
+        } else if(request.getParameter("estado").equals("")){
+            response.getWriter().write("{\"erro\":\"Estado vazio\",\"result\":\"false\"}");
+            response.getWriter().flush();
+        } else if (request.getParameter("cidade").equals("")){
+            response.getWriter().write("{\"erro\":\"Cidade vazio\",\"result\":\"false\"}");
+            response.getWriter().flush();
+        } else if(request.getParameter("bairro").equals("")){
+            response.getWriter().write("{\"erro\":\"Nome vazio\",\"result\":\"false\"}");
+            response.getWriter().flush();
+        }else if(request.getParameter("rua").equals("")){
+            response.getWriter().write("{\"erro\":\"Rua vazio\",\"result\":\"false\"}");
+            response.getWriter().flush();
+        }else if(request.getParameter("numero").equals("")){
+            response.getWriter().write("{\"erro\":\"Numero vazio\",\"result\":\"false\"}");
             response.getWriter().flush();
         }
     }
