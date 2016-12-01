@@ -35,6 +35,7 @@ public class UsuarioDAO {
             con.close();
         }catch(Exception e){
             e.printStackTrace();
+            return false;
         }
         return false;
     }
@@ -58,9 +59,10 @@ public class UsuarioDAO {
             con.close();
             return true;
         }catch(Exception e){
-            e.printStackTrace();
+            //e.printStackTrace();
+            return false;
         }
-        return false;
+        
     }
     
     public String getNextDataId(String user){

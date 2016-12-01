@@ -37,27 +37,27 @@
 			<div class="carousel_item-content-inner">
                                 <div class="div-form">
                                     <h1 class="carousel_item-title">Cadastro de Usuário</h1>
-                                    <form action="Inscrevase" method="post" accept-charset="utf-8">
+                                    <!--<form action="Inscrevase" method="post" accept-charset="utf-8" id="formInscrevase">-->
                                        <table class="centerBox">
                                             <tr>
                                                 <td>Nome:</td>
-                                                <td><input type="text" name="nome" placeholder="Insira o seu nome completo" required="required"></td>
+                                                <td><input type="text" name="nome" placeholder="Insira o seu nome completo" required="required" id="inputName"></td>
                                              </tr>
                                             <tr>
                                                 <td>E-mail:</td>
-                                                <td><input type="email" name="email" placeholder="Insira o seu endereço de e-mail" required="required"></td>
+                                                <td><input type="email" name="email" placeholder="Insira o seu endereço de e-mail" required="required" id="inputEmail"></td>
                                             </tr>
                                             <tr>
                                                 <td>Login:</td>
-                                                <td><input type="text" name="login" placeholder="Insira o seu login que será utilizado para acessar o sistema" required="required"></td>
+                                                <td><input type="text" name="login" placeholder="Insira o seu login que será utilizado para acessar o sistema" required="required" id="inputLogin"></td>
                                             </tr>
                                             <tr>
                                                 <td>Senha:</td>
-                                                <td><input type="password" name="senha" placeholder="Insira a sua senha para acessar o sistema" required="required"></td>
+                                                <td><input type="password" name="senha" placeholder="Insira a sua senha para acessar o sistema" required="required" id="inputSenha"></td>
                                             </tr>
                                             <tr>
                                                 <td>Estado:</td>
-                                                <td><select name="estado" required="required">
+                                                <td><select name="estado" required="required" id="inputEstado">
                                                     <option value="AC">Acre</option>
                                                     <option value="AL">Alagoas</option>
                                                     <option value="AM">Amazonas</option>
@@ -89,36 +89,34 @@
                                             </tr>
                                             <tr>
                                                 <td>Cidade:</td>
-                                                <td><input type="text" name="cidade" placeholder="Insira o nome da cidade onde você nasceu" required="required"></td>
+                                                <td><input type="text" name="cidade" placeholder="Insira o nome da cidade onde você nasceu" required="required" id="inputCidade"></td>
                                             </tr>
                                             <tr>
                                                 <td>Bairro:</td>
-                                                <td><input type="text" name="bairro" placeholder="Insira o nome do bairro onde você mora" required="required"></td>
+                                                <td><input type="text" name="bairro" placeholder="Insira o nome do bairro onde você mora" required="required" id="inputBairro"></td>
                                             </tr>
                                             <tr>
                                                 <td>Rua:</td>
-                                                <td><input type="text" name="rua" placeholder="Insira o nome da rua onde você mora" required="required"></td>
+                                                <td><input type="text" name="rua" placeholder="Insira o nome da rua onde você mora" required="required" id="inputRua"></td>
                                             </tr>
                                             <tr>
                                                 <td>Numero:</td>
-                                                <td><input type="text" name="numero" placeholder="Insira o número da sua residência" required="required"></td>
+                                                <td><input type="text" name="numero" placeholder="Insira o número da sua residência" required="required" id="inputNumero"></td>
                                             </tr>
-                                            <c:if test="${insertError == true}">
-                                                <tr>
-                                                    <td>
-                                                    </td>
-                                                    <td>
-                                                        Erro ao inserir, tente novamente!
-                                                    </td>
-                                                </tr>
-                                            </c:if>
+                                             <tr>
+                                                <td>
+                                                </td>
+                                                <td>
+                                                    <label style="display :none" id="labelInvalid">Erro ao inserir, tente novamente!</label>
+                                                </td>
+                                            </tr>
                                         </table>
                                         <span class="centerBox">
-                                            <input type="submit" value="Cadastrar" class="buttons">
+                                            <input type="button" value="Cadastrar" class="buttons" id="buttonSubmit">
                                             <input type="reset" value="Limpar" class="buttons">
                                             <a href="Login"><button type="button" class="buttons">Cancelar</button></a>
                                         </span>
-                                    </form>
+                                    <!--</form>-->
                                 </div>
 			</div>	
 		</div>
@@ -182,5 +180,38 @@
 			</div>
 		</footer>
 	</div>
+        <script type="text/javascript">
+            document.getElementById("buttonSubmit").addEventListener("click", function (){
+                var nome  = document.getElementById("inputName").value;
+                var email = document.getElementById("inputEmail").value;
+                var login = document.getElementById("inputLogin").value;
+                var senha = document.getElementById("inputSenha").value;
+                var estado = document.getElementById("inputEstado").value;
+                var cidade = document.getElementById("inputCidade").value;
+                var bairro = document.getElementById("inputBairro").value;
+                var rua = document.getElementById("inputRua").value;
+                var numero = document.getElementById("inputNumero").value;
+                var parameters = "nome="+nome+"&email="+email+"&login="+login+"&senha="+senha+"&estado="+estado+"&cidade="+cidade+"&bairro="+bairro+"&rua="+rua+"&numero="+numero;
+                var xmlhttp;
+                if (window.XMLHttpRequest){ 
+                    xmlhttp = new XMLHttpRequest();} 
+                else{ 
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                } 
+                xmlhttp.open("POST","Inscrevase",true); 
+                xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded;charset=UTF-8");
+                xmlhttp.onreadystatechange = function (){
+                    if(this.readyState === 4 && this.status === 200){
+                        alert(this.responseText);
+                        if (this.responseText === "false"){
+                            document.getElementById("labelInvalid").style.display = "block";
+                        } else {           
+                            window.location.href = "Login";
+                        }
+                    }
+                };
+                xmlhttp.send(parameters); 
+            });
+        </script>
     </body>
 </html>

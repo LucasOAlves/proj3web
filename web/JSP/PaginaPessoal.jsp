@@ -61,11 +61,10 @@
                             <span class="carousel_item-title" >Enviar Arquivos    <span style="font-size:14px;"><a href="#PAGETOP" style="text-decoration: none;color: whitesmoke;">[topo]</a></span></span>
                         </div>
                         <div class="centerBox">
+                            
                             <progress id="progress" value="0"></progress>
                             <button id="button">Start uploading</button>
                             <span id="display"></span>
-                            
-                          
                             
                             
                             <form action="PaginaPessoal" method="post" enctype="multipart/form-data">
