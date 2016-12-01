@@ -6,6 +6,7 @@
 
 import dao.UsuarioDAO;
 import java.io.IOException;
+import java.util.Enumeration;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -56,14 +57,15 @@ public class Inscrevase extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("utf-8");
-        UsuarioDAO userDao = new UsuarioDAO();        
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        UsuarioDAO userDao = new UsuarioDAO(); 
         if(userDao.insereUsuario(request.getParameter("nome"),request.getParameter("email"),request.getParameter("login"),request.getParameter("senha"),request.getParameter("estado"),request.getParameter("cidade"),request.getParameter("bairro"),request.getParameter("rua"),request.getParameter("numero"))){
-            request.getRequestDispatcher("JSP/Login.jsp").forward(request, response);
+            response.sendRedirect("Login");
+            response.getWriter().flush();
         } else {
-            request.setAttribute("insertError", true);
-            request.getRequestDispatcher("JSP/Inscrevase.jsp").forward(request, response);
+            response.getWriter().write("false");
+            response.getWriter().flush();
         }
     }
 
