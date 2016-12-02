@@ -17,8 +17,8 @@ import java.sql.ResultSet;
 public class UsuarioDAO {
     private Connection con;
     private PreparedStatement ppst;
-    private final String username = "postgres";
-    private final String password = "0";
+    private final String username = "murilo";
+    private final String password = "murilo";
     public boolean logar(String login, String senha){
         try{
             Class.forName("org.postgresql.Driver");
@@ -175,6 +175,7 @@ public class UsuarioDAO {
                 out += "</tr>";
             }
             out += "</table>";
+            con.close();
             return out;
         }catch(Exception e){
             e.printStackTrace(System.out);
@@ -214,6 +215,7 @@ public class UsuarioDAO {
                 out += "</td>";
                 out += "</tr>";
             }
+            con.close();
             out += "</table>";
             return out;
         }catch(Exception e){
@@ -226,7 +228,7 @@ public class UsuarioDAO {
         try{
             Class.forName("org.postgresql.Driver");
             con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
-            String sql = "SELECT description FROM data WHERE login LIKE ? AND description ILIKE ? ORDER BY id DESC;";
+            String sql = "SELECT description FROM data WHERE login LIKE ? AND description ILIKE ? ORDER BY id DESC LIMIT 5;";
             ppst = con.prepareStatement(sql);
             ppst.setString(1, user);
             ppst.setString(2, "%"+query+"%");
@@ -240,8 +242,85 @@ public class UsuarioDAO {
             while(rs.next()){
                 out += "<option value=\""+rs.getString("description")+"\">";
             }
+            con.close();
             return out;
         }catch(Exception e){
+            e.printStackTrace();
+        }
+        return "";
+    }
+    
+    public String loadMore(String user, String query, String path, int reqNum){
+        try{
+            Class.forName("org.postgresql.Driver");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
+            String sql = "SELECT * FROM data WHERE login LIKE ? AND description ILIKE ? ORDER BY id DESC OFFSET ? LIMIT 5;";
+            ppst = con.prepareStatement(sql);
+            ppst.setString(1, user);
+            ppst.setString(2, "%"+query+"%");
+            ppst.setInt(3, reqNum*5);
+            ResultSet rs = ppst.executeQuery();
+            String out = "";
+            while(rs.next()){
+                out     +=  "<tr>"
+                        +   "   <td>"
+                        +   "       <form action=\"PaginaPessoal\" method=\"post\" accept-charset=\"utf-8\" style=\"display:block;\">"
+                        +   "           <input type=\"hidden\" name=\"postType\" value=\"downloadFile\">"
+                        +   "           <input type=\"hidden\" name=\"dataFileName\" value=\""+rs.getString("file")+"\">"
+                        +   "           <input type=\"hidden\" name=\"fileType\" value=\""+rs.getString("type")+"\">"
+                        +   "           <input type=\"hidden\" name=\"dataFileOldName\" value=\""+rs.getString("fileoldname")+"\">"
+                        +   "           <input type=\"submit\" name=\"downloadButton\" value=\"Download\" class=\"buttons_small\" style=\"font-size:13px; height:25px;margin-top:2px;margin-bottom:2px;width:100px;\">"
+                        +   "       </form>"
+                        +   "       <form action=\"PaginaPessoal\" method=\"post\" accept-charset=\"utf-8\" style=\"display:block;\">"
+                        +   "           <input type=\"hidden\" name=\"postType\" value=\"removeFile\">"
+                        +   "           <input type=\"hidden\" name=\"dataFileName\" value=\""+rs.getString("file")+"\">"
+                        +   "           <input type=\"submit\" name=\"removeButton\" value=\"Excluir\" class=\"buttons_small\" style=\"font-size:13px; height:25px;margin-top:2px;margin-bottom:2px;width:100px;\">"
+                        +   "       </form>"
+                        +   "   </td>";
+                if(rs.getString("type").split("/")[0].equals("text")){
+                    out +=  "<td>"
+                        +   "   <span style=\"display:block;text-align:center;margin-bottom:15px;\">"+rs.getString("fileoldname")+"</span>"
+                        +   "</td>";
+                } else if(rs.getString("type").split("/")[0].equals("image")){
+                    out +=  "<td>"
+                        +   "   <a href=\""+rs.getString("file")+"\"><img src=\""+rs.getString("file")+"\" alt=\""+rs.getString("description")+"\" class=\"thumbnail\"/></a>"
+                        +   "</td>";
+                } else if(rs.getString("type").split("/")[0].equals("video")){
+                    out +=  "<td>" 
+                        +   "   <div class=\"centerBox\">"
+                        +   "       <video controls name=\"media\" height=\"200px\">"
+                        +   "           <source src=\""+path+"/"+rs.getString("file")+"\" type=\"video/x-flv\">"
+                        +   "           <source src=\""+path+"/"+rs.getString("file")+"\" type=\"video/mp4\">"
+                        +   "           <source src=\""+path+"/"+rs.getString("file")+"\" type=\"video/3gpp\">"
+                        +   "           <source src=\""+path+"/"+rs.getString("file")+"\" type=\"video/x-msvideo\">"
+                        +   "           <source src=\""+path+"/"+rs.getString("file")+"\" type=\"video/x-ms-wmv\">"
+                        +   "           <source src=\""+path+"/"+rs.getString("file")+"\" type=\"video/webm\">"
+                        +   "       </video>"
+                        +   "   </div>"
+                        +   "</td>";
+                } else if(rs.getString("type").split("/")[0].equals("audio")){
+                    out +=  "<td class=\"descriptionCell\">"
+                        +   "   <div class=\"centerBox\">"
+                        +   "       <audio controls>"
+                        +   "           <source src=\""+path+"/"+rs.getString("file")+"\" type=\"audio/mpeg\">"
+                        +   "           <source src=\""+path+"/"+rs.getString("file")+"\" type=\"audio/vnd.wav\">"
+                        +   "       </audio>"
+                        +   "   </div>"
+                        +   "</td>";
+                }
+                out     += "</tr>";
+                out     +=  "<tr>"
+                        +   "   <td>"
+                        +   "   </td>"
+                        +   "   <td class=\"dataDescription\">"
+                        +   "       "+rs.getString("description")
+                        +   "   </td>"
+                        +   "</tr>"
+                        +   "<tr><td><br><br></td><td><br><hr><br></td></tr>";
+            }
+            con.close();
+            return out;
+        } catch(Exception e) {
             e.printStackTrace();
         }
         return "";
@@ -316,6 +395,7 @@ public class UsuarioDAO {
                         +   "<tr><td><br><br></td><td><br><hr><br></td></tr>";
             }
             out += "</table>";
+            con.close();
             return out;
         }catch(Exception e){
             e.printStackTrace(System.out);
@@ -337,5 +417,23 @@ public class UsuarioDAO {
             e.printStackTrace(System.out);
         }
         return false;
+    }
+
+    public int lastId(String user) {
+        try{
+            Class.forName("org.postgresql.Driver");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
+            String sql = "SELECT id FROM data WHERE login LIKE ? ORDER BY id DESC LIMIT 1;";
+            ppst = con.prepareStatement(sql);
+            ppst.setString(1, user);
+            ResultSet rs = ppst.executeQuery();
+            while(rs.next()){
+                con.close();
+                return rs.getInt("id");
+            }
+        }catch(Exception e){
+            e.printStackTrace(System.out);
+        }
+        return -1;
     }
 }

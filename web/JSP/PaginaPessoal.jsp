@@ -11,22 +11,10 @@
 <html>
     <head>
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.js"></script>
-        <script>
-            function liveSearch(currentSearch){
-                if(currentSearch.length == 0){
-                    document.getElementById("livesearch").innerHTML = "";
-                    document.getElementById("livesearch").style.border = "0px";
-                }
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function (){
-                    if(this.readyState === 4 && this.status === 200){
-                        document.getElementById("livesearch").innerHTML = this.responseText;
-                    }
-                };
-                xhttp.open("GET","PaginaPessoal?search="+currentSearch,true);
-                xhttp.send(null);
-            }
-        </script>
+        <script type="text/javascript" src="JS/paginaPessoalLiveSearch_mini.js"></script>
+        <script type="text/javascript" src="JS/paginaPessoalLazyLoading_mini.js"></script>
+        <script type="text/javascript" src="JS/newContentNotification_mini.js"></script>
+        <script type="text/javascript" src="JS/sendFileWithProgressBar_mini.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="CSS/paginapessoal.css">
         <title>Página Pessoal</title>
@@ -52,27 +40,21 @@
 	</div>
         <div class="main_article">
             <div class="carousel_item-content">
-                <div class="carousel_item-content-inner">
+                <div id="contents" class="carousel_item-content-inner">
                     <a name="PAGETOP"></a>
                     <div class="centerBoxWrapper" id="searchBox">
                         <h1 class="carousel_item-title">Página Pessoal</h1>
-                        <form action="PaginaPessoal" method="get">
-                            Busca: <input id="inputBusca" type="search" name="busca" placeholder="Buscar dados" list="livesearch" autocomplete="off">
-                            <datalist id="livesearch">                                    
-                            </datalist>
-                            <input type="submit" value="Buscar" class="buttons_small" style="padding-bottom: 4px; padding-top: 8px;">
-                        </form>
-                        <span class="centerBox"><a href="#SENDFILE" class="buttons_small">Enviar Arquivo</a>   <a href="#SENDTEXT" class="buttons_small">Enviar Texto</a></span><br><br>
+                        Busca: <input id="inputBusca" type="search" name="busca" placeholder="Buscar dados" list="livesearch" autocomplete="off">
+                        <datalist id="livesearch">                                    
+                        </datalist>
+                        <button id="searchButton" class="buttons_small" style="padding-top: 8px;">Buscar</button>
+                        <br><span class="centerBox"><a href="#SENDFILE" class="buttons_small">Enviar Arquivo</a>   <a href="#SENDTEXT" class="buttons_small">Enviar Texto</a></span><br><br>
                         <br><br>
+                        <span id="newContentNotification"></span>
                         <div class="dataTable">
-                            <%
-                                UsuarioDAO userDao = new UsuarioDAO();
-                                if(request.getParameter("busca")!=null){
-                                    out.println(userDao.buscaFiles(request.getSession().getAttribute("login").toString(), request.getParameter("busca").toString(), request.getContextPath()));
-                                } else {
-                                    out.println(userDao.buscaFiles(request.getSession().getAttribute("login").toString(), "", request.getContextPath()));
-                                }
-                            %>
+                            <table id="contentTable" class="dataTable">
+                                
+                            </table>
                         </div>
                         <br><hr><br>
                         <div>
@@ -81,12 +63,10 @@
                         </div>
                         <div class="centerBox">
                             
-                            <progress id="progress" value="0"></progress>
-                            <button id="button">Start uploading</button>
                             <span id="display"></span>
                             
                             
-                            <form action="PaginaPessoal" method="post" enctype="multipart/form-data">
+                            <form id="sendFilesForm" action="PaginaPessoal" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="postType" value="uploadFile">
                                 <table class="dataTable">
                                     <tr>
@@ -107,11 +87,12 @@
                                     </tr>
                                 </table><br>
                                 <span class="centerBox">
-                                    <input type="submit" value="Enviar" class="buttons_small">
+                                    <!--<input type="submit" value="Enviar" class="buttons_small">-->
+                                    <div id="sendingProgress"></div><br>
+                                    <button type="button" class="buttons_small" id="sendFileButton">Enviar</button>
                                     <input type="reset" value="Limpar" class="buttons_small">
                                 </span>
                             </form>
-                            
                             
                             
                         </div>
@@ -201,6 +182,20 @@
         <script>
             $('#inputBusca').bind('input', function() {
                 liveSearch($(this).val());
+            });
+            $(window).scroll(function (){
+                if($(window).scrollTop() > $("#contentTable").height()){
+                    loadMoreContent();
+                }
+            });
+            document.getElementById("searchButton").addEventListener("click",function (){
+               loadFirstContent(); 
+            });
+            setInterval(function (){
+                hasNewContent();
+            },4000);
+            document.getElementById("sendFileButton").addEventListener("click",function (){
+               sendFileWithProgressBar();
             });
         </script>
     </body>
