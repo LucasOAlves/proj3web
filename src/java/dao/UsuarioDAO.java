@@ -418,4 +418,22 @@ public class UsuarioDAO {
         }
         return false;
     }
+
+    public int lastId(String user) {
+        try{
+            Class.forName("org.postgresql.Driver");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
+            String sql = "SELECT id FROM data WHERE login LIKE ? ORDER BY id DESC LIMIT 1;";
+            ppst = con.prepareStatement(sql);
+            ppst.setString(1, user);
+            ResultSet rs = ppst.executeQuery();
+            while(rs.next()){
+                con.close();
+                return rs.getInt("id");
+            }
+        }catch(Exception e){
+            e.printStackTrace(System.out);
+        }
+        return -1;
+    }
 }

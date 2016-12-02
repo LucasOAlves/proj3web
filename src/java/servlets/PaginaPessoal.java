@@ -66,6 +66,11 @@ public class PaginaPessoal extends HttpServlet {
             response.sendRedirect("Login");
             return;
         }
+        if(request.getParameter("newcontent")!=null && !request.getParameter("newcontent").equals("")){
+            response.getWriter().write("{\"id\":\""+userDao.lastId(request.getSession().getAttribute("login").toString())+"\"}");
+            response.getWriter().flush();
+            return;
+        }
         if(request.getParameter("loadcontent")!=null && !request.getParameter("loadcontent").equals("")){
             request.getSession().setAttribute("currentSearch", request.getParameter("search"));
             response.getWriter().write(userDao.loadMore(
@@ -74,6 +79,7 @@ public class PaginaPessoal extends HttpServlet {
                     request.getContextPath(),
                     Integer.parseInt(request.getParameter("loadcontent")))
             );
+            response.getWriter().flush();
             return;
         }
         if(request.getParameter("loadmore")!=null && !request.getParameter("loadmore").equals("")){
@@ -83,11 +89,13 @@ public class PaginaPessoal extends HttpServlet {
                     request.getContextPath(),
                     Integer.parseInt(request.getParameter("loadmore")))
             );
+            response.getWriter().flush();
             return;
         }
         if(request.getParameter("search")!=null){
             request.getSession().setAttribute("currentSearch", request.getParameter("search"));
             response.getWriter().write(userDao.liveSearch(request.getSession().getAttribute("login").toString(), request.getParameter("search").toString()));
+            response.getWriter().flush();
         } else {
             request.getRequestDispatcher("JSP/PaginaPessoal.jsp").forward(request, response);
         }
@@ -124,6 +132,12 @@ public class PaginaPessoal extends HttpServlet {
                 }
                 int newId = Integer.parseInt(fileNameInStorage)+1;
                 fileNameInStorage = user+newId+"."+extensao;
+                System.out.println("newId: "+newId);
+                System.out.println("user: "+user);
+                System.out.println("file in storage: "+"uploads/"+fileNameInStorage);
+                System.out.println("file name: "+filePart.getSubmittedFileName());
+                System.out.println("content-type: "+filePart.getContentType());
+                System.out.println("description: "+description);
                 userDao.insereData(newId, user, "uploads/"+fileNameInStorage, filePart.getSubmittedFileName(), filePart.getContentType(), description);
                 FileOutputStream out = new FileOutputStream(new File(filesPath+"/"+fileNameInStorage));
                 byte [] buffer = new byte[1024];
