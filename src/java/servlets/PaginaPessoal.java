@@ -66,7 +66,27 @@ public class PaginaPessoal extends HttpServlet {
             response.sendRedirect("Login");
             return;
         }
+        if(request.getParameter("loadcontent")!=null && !request.getParameter("loadcontent").equals("")){
+            request.getSession().setAttribute("currentSearch", request.getParameter("search"));
+            response.getWriter().write(userDao.loadMore(
+                    request.getSession().getAttribute("login").toString(),
+                    request.getSession().getAttribute("currentSearch").toString(),
+                    request.getContextPath(),
+                    Integer.parseInt(request.getParameter("loadcontent")))
+            );
+            return;
+        }
+        if(request.getParameter("loadmore")!=null && !request.getParameter("loadmore").equals("")){
+            response.getWriter().write(userDao.loadMore(
+                    request.getSession().getAttribute("login").toString(),
+                    request.getSession().getAttribute("currentSearch").toString(),
+                    request.getContextPath(),
+                    Integer.parseInt(request.getParameter("loadmore")))
+            );
+            return;
+        }
         if(request.getParameter("search")!=null){
+            request.getSession().setAttribute("currentSearch", request.getParameter("search"));
             response.getWriter().write(userDao.liveSearch(request.getSession().getAttribute("login").toString(), request.getParameter("search").toString()));
         } else {
             request.getRequestDispatcher("JSP/PaginaPessoal.jsp").forward(request, response);

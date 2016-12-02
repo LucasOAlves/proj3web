@@ -12,6 +12,7 @@
     <head>
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.js"></script>
         <script>
+            var dataReqNum = -1;
             function liveSearch(currentSearch){
                 if(currentSearch.length == 0){
                     document.getElementById("livesearch").innerHTML = "";
@@ -24,6 +25,31 @@
                     }
                 };
                 xhttp.open("GET","PaginaPessoal?search="+currentSearch,true);
+                xhttp.send(null);
+            }
+            
+            function loadMoreContent(){
+                dataReqNum++;        
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function (){
+                    if(this.readyState === 4 && this.status === 200){
+                        document.getElementById("contentTable").innerHTML += this.responseText;
+                    }
+                };
+                xhttp.open("GET","PaginaPessoal?loadmore="+dataReqNum,true);
+                xhttp.send(null);
+            }
+            
+            function loadFirstContent(){
+                dataReqNum = 0;
+                document.getElementById("contentTable").innerHTML = "";
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function (){
+                    if(this.readyState === 4 && this.status === 200){
+                        document.getElementById("contentTable").innerHTML += this.responseText;
+                    }
+                };
+                xhttp.open("GET","PaginaPessoal?loadcontent="+dataReqNum+"&search="+document.getElementById("inputBusca").value,true);
                 xhttp.send(null);
             }
         </script>
@@ -52,27 +78,31 @@
 	</div>
         <div class="main_article">
             <div class="carousel_item-content">
-                <div class="carousel_item-content-inner">
+                <div id="contents" class="carousel_item-content-inner">
                     <a name="PAGETOP"></a>
                     <div class="centerBoxWrapper" id="searchBox">
                         <h1 class="carousel_item-title">Página Pessoal</h1>
-                        <form action="PaginaPessoal" method="get">
+                        <!--<form action="PaginaPessoal" method="get">-->
                             Busca: <input id="inputBusca" type="search" name="busca" placeholder="Buscar dados" list="livesearch" autocomplete="off">
                             <datalist id="livesearch">                                    
                             </datalist>
-                            <input type="submit" value="Buscar" class="buttons_small" style="padding-bottom: 4px; padding-top: 8px;">
-                        </form>
-                        <span class="centerBox"><a href="#SENDFILE" class="buttons_small">Enviar Arquivo</a>   <a href="#SENDTEXT" class="buttons_small">Enviar Texto</a></span><br><br>
+                            <!--<input type="submit" value="Buscar" class="buttons_small" style="padding-bottom: 4px; padding-top: 8px;">-->
+                            <button id="searchButton" class="buttons_small" style="padding-top: 8px;">Buscar</button>
+                        <!--</form>-->
+                        <br><span class="centerBox"><a href="#SENDFILE" class="buttons_small">Enviar Arquivo</a>   <a href="#SENDTEXT" class="buttons_small">Enviar Texto</a></span><br><br>
                         <br><br>
                         <div class="dataTable">
-                            <%
-                                UsuarioDAO userDao = new UsuarioDAO();
+                            <table id="contentTable" class="dataTable">
+                                
+                            </table>
+                            <!--<%
+                                /*UsuarioDAO userDao = new UsuarioDAO();
                                 if(request.getParameter("busca")!=null){
                                     out.println(userDao.buscaFiles(request.getSession().getAttribute("login").toString(), request.getParameter("busca").toString(), request.getContextPath()));
                                 } else {
                                     out.println(userDao.buscaFiles(request.getSession().getAttribute("login").toString(), "", request.getContextPath()));
-                                }
-                            %>
+                                }*/
+                            %>-->
                         </div>
                         <br><hr><br>
                         <div>
@@ -201,6 +231,14 @@
         <script>
             $('#inputBusca').bind('input', function() {
                 liveSearch($(this).val());
+            });
+            $(window).scroll(function (){
+                if($(window).scrollTop() > $("#contentTable").height()){
+                    loadMoreContent();
+                }
+            });
+            document.getElementById("searchButton").addEventListener("click",function (){
+               loadFirstContent(); 
             });
         </script>
     </body>
