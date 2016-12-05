@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 /**
  *
@@ -17,8 +18,8 @@ import java.sql.ResultSet;
 public class UsuarioDAO {
     private Connection con;
     private PreparedStatement ppst;
-    private final String username = "murilo";
-    private final String password = "murilo";
+    private final String username = "postgres";
+    private final String password = "0";
     public boolean logar(String login, String senha){
         try{
             Class.forName("org.postgresql.Driver");
@@ -44,11 +45,13 @@ public class UsuarioDAO {
         try{
             Class.forName("org.postgresql.Driver");
             con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
-            String sql = "SELECT * FROM usertable where ? like ?";
+            String sql = "SELECT * FROM usertable WHERE ";
+            sql+=campo+" LIKE ?";           
+            System.out.println(sql);
             ppst = con.prepareStatement(sql);
-            ppst.setString(1, campo);
-            ppst.setString(2, valor);
+            ppst.setString(1, valor);            
             ResultSet rs = ppst.executeQuery();
+            
             if(rs.next()){
                 con.close();
                 return true;

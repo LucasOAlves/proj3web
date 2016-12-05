@@ -57,47 +57,47 @@
                             </table>
                         </div>
                         <br><hr><br>
-                        <div>
+                        
+                        <div class="centerBox div-drag" draggable="true" id="divEnviarArquivo">
                             <a name="SENDFILE"></a>
                             <span class="carousel_item-title" >Enviar Arquivos    <span style="font-size:14px;"><a href="#PAGETOP" style="text-decoration: none;color: whitesmoke;">[topo]</a></span></span>
-                        </div>
-                        <div class="centerBox">
-                            
-                            <span id="display"></span>
-                            
-                            
-                            <form id="sendFilesForm" action="PaginaPessoal" method="post" enctype="multipart/form-data">
-                                <input type="hidden" name="postType" value="uploadFile">
-                                <table class="dataTable">
-                                    <tr>
-                                        <td>
-                                            Descrição:
-                                        </td>
-                                        <td>
-                                            <input type="text" name="description" placeholder="Insira uma descrição do conteúdo à enviar" required="required">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Arquivo:
-                                        </td>
-                                        <td>
-                                            <input type="file" name="file" placeholder="Escolha o seu arquivo" required="required" value="Nenhum arquivo selecionado">
-                                        </td>
-                                    </tr>
-                                </table><br>
-                                <span class="centerBox">
-                                    <!--<input type="submit" value="Enviar" class="buttons_small">-->
-                                    <div id="sendingProgress"></div><br>
-                                    <button type="button" class="buttons_small" id="sendFileButton">Enviar</button>
-                                    <input type="reset" value="Limpar" class="buttons_small">
-                                </span>
-                            </form>
-                            
+
+                            <div class="centerBox">
+                                <span id="display"></span>   
+                                <form id="sendFilesForm" action="PaginaPessoal" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="postType" value="uploadFile">
+                                    <table class="dataTable">
+                                        <tr>
+                                            <td>
+                                                Descrição:
+                                            </td>
+                                            <td>
+                                                <input type="text" name="description" placeholder="Insira uma descrição do conteúdo à enviar" required="required">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Arquivo:
+                                            </td>
+                                            <td>
+                                                <input type="file" name="file" placeholder="Escolha o seu arquivo" required="required" value="Nenhum arquivo selecionado">
+                                            </td>
+                                        </tr>
+                                    </table><br>
+                                    <span class="centerBox">
+                                        <!--<input type="submit" value="Enviar" class="buttons_small">-->
+                                        <div id="sendingProgress"></div><br>
+                                        <button type="button" class="buttons_small" id="sendFileButton">Enviar</button>
+                                        <input type="reset" value="Limpar" class="buttons_small">
+                                    </span>
+                                </form>                            
+                            </div>
                             
                         </div>
+                        
                         <br><hr><br>
-                        <div class="centerBox">
+                        
+                        <div class="centerBox div-drag" draggable="true" id="divEnviarTexto">
                             <a name="SENDTEXT"></a>
                             <span class="carousel_item-title">Enviar Texto    <span style="font-size:14px;"><a href="#PAGETOP" style="text-decoration: none;color: whitesmoke;">[topo]</a></span></span>
                             <div class="centerBox">
@@ -111,11 +111,12 @@
                                    </span>
                                </form>
                             </div>
-                            <form action="PaginaPessoal" method="post" accept-charset="utf-8">
-                            <input type="hidden" name="postType" value="sair" class="text-field"><br>
-                            <input type="submit" value="Sair" id="sairButton" class="buttons_small">
-                            </form>
+                            
                         </div>
+                        <form action="PaginaPessoal" method="post" accept-charset="utf-8">
+                        <input type="hidden" name="postType" value="sair" class="text-field"><br>
+                        <input type="submit" value="Sair" id="sairButton" class="buttons_small">
+                        </form>
                     </div>
                 </div>	
             </div>
@@ -179,7 +180,7 @@
 			</div>
 		</footer>
 	</div>
-        <script>
+        <script>            
             $('#inputBusca').bind('input', function() {
                 liveSearch($(this).val());
             });
@@ -196,7 +197,76 @@
             },4000);
             document.getElementById("sendFileButton").addEventListener("click",function (){
                sendFileWithProgressBar();
-            });
+            });  
+            
+            var dragSrcEl = null;
+
+            function handleDragStart(e) {
+                
+                dragSrcEl = this;
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/html', this.innerHTML);
+            }
+            
+            
+            function handleDragOver(e) {
+              if (e.preventDefault) {
+                e.preventDefault(); // Necessary. Allows us to drop.
+              }
+
+              e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+
+              return false;
+            }
+
+            function handleDragEnter(e) {
+              // this / e.target is the current hover target.
+              this.classList.add('over');
+            }
+
+            function handleDragLeave(e) {
+              this.classList.remove('over');  // this / e.target is previous target element.
+            }
+            
+            function handleDrop(e) {
+               // this/e.target is current target element.
+
+                if (e.stopPropagation) {
+                  e.stopPropagation(); // Stops some browsers from redirecting.
+                }
+
+                // Don't do anything if dropping the same column we're dragging.
+                if (dragSrcEl != this) {
+                  // Set the source column's HTML to the HTML of the columnwe dropped on.
+                  dragSrcEl.innerHTML = this.innerHTML;
+                  this.innerHTML = e.dataTransfer.getData('text/html');
+                }
+
+                return false;
+            }
+            function handleDragEnd(e) {
+                // this/e.target is the source node.
+                
+                document.getElementById("divEnviarArquivo").classList.remove("over");
+                document.getElementById("divEnviarTexto").classList.remove("ovre");
+            }
+
+            document.getElementById("divEnviarArquivo").addEventListener("dragstart",handleDragStart,false);
+            document.getElementById("divEnviarArquivo").addEventListener("dragenter",handleDragEnter,false);
+            document.getElementById("divEnviarArquivo").addEventListener("dragover",handleDragOver,false);
+            document.getElementById("divEnviarArquivo").addEventListener("dragleave",handleDragLeave,false);
+            document.getElementById("divEnviarArquivo").addEventListener("drop",handleDrop,false);
+            document.getElementById("divEnviarArquivo").addEventListener("dragend",handleDragEnd,false);
+            
+            document.getElementById("divEnviarTexto").addEventListener("dragstart",handleDragStart,false);
+            document.getElementById("divEnviarTexto").addEventListener("dragenter",handleDragEnter,false);
+            document.getElementById("divEnviarTexto").addEventListener("dragover",handleDragOver,false);
+            document.getElementById("divEnviarTexto").addEventListener("dragleave",handleDragLeave,false);
+            document.getElementById("divEnviarTexto").addEventListener("drop",handleDrop,false);
+            document.getElementById("divEnviarTexto").addEventListener("dragend",handleDragEnd,false);
+
+            
+            
         </script>
     </body>
 </html>

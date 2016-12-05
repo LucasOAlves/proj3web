@@ -126,7 +126,7 @@ li {
 .main_article {
 	margin-top: -133px;
 	width: 100%;
-	background: url(https://my.pottermore.com/assets/img/join-background.jpg) no-repeat;
+	background: url(https://s-media-cache-ak0.pinimg.com/originals/46/6b/6d/466b6d5e575a9d8eabbc97ce34d07993.png) no-repeat;
         background-size: cover; 
 }
 
@@ -484,6 +484,20 @@ input[placeholder]{
 .dataTable {
     margin: 0 auto 0 auto;
 }
+
+[draggable] {  
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  /* Required to make elements draggable in old WebKit */
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}
+
+.div-drag{
+    cursor: move;    
+}
+
 
 @media (min-width: 48em){
 	.header {

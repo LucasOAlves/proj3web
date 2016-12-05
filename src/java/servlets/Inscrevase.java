@@ -65,7 +65,7 @@ public class Inscrevase extends HttpServlet {
         if(userDao.insereUsuario(request.getParameter("nome"),request.getParameter("email"),request.getParameter("login"),request.getParameter("senha"),request.getParameter("estado"),request.getParameter("cidade"),request.getParameter("bairro"),request.getParameter("rua"),request.getParameter("numero"))){
             response.getWriter().write("{\"url\":\"Login\",\"result\":\"true\"}");
             response.getWriter().flush();
-        } else if(userDao.verificaUnique("email",request.getParameter("email"))){
+        } else  if(userDao.verificaUnique("email",request.getParameter("email"))){
             response.getWriter().write("{\"erro\":\"Email já utilizado\",\"result\":\"false\"}");
             response.getWriter().flush();
         } else if(userDao.verificaUnique("login", request.getParameter("login"))){
@@ -92,6 +92,8 @@ public class Inscrevase extends HttpServlet {
         }else if(request.getParameter("numero").equals("")){
             response.getWriter().write("{\"erro\":\"Numero vazio\",\"result\":\"false\"}");
             response.getWriter().flush();
+        }else {
+            response.getWriter().write("{\"erro\":\"Erro ao acessar banco\",\"result\":\"false\"}");
         }
     }
 

@@ -12,6 +12,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="CSS/login.css">
         <script type="text/javascript" src="JS/attemptToLogIn_mini.js"></script>
+        <script data-require="mustache.js@0.7.2" data-semver="0.7.2" src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.js"></script>
+
         <title>Login</title>
     </head>
     <body>
@@ -37,26 +39,13 @@
 		<div class="carousel_item-content">
 			<div class="carousel_item-content-inner">
 				<h1 class="carousel_item-title">Login Pottermore</h1>
-                                <div class="div-form">
+                                <div class="div-form" id="div-Login">
                                     <!--<form id="loginForm" action="Login" method="post" accept-charset="utf-8">-->
-                                        <table class="loginTable">
-                                            <tr>
-                                                <td style="text-align:right;"><span class="h2_login">Usuário:</span></td>
-                                                <td><input type="text" id="inputName" name="login" placeholder="Insira o seu login" required="required"></td>
-                                                </tr>
-                                            <tr>
-                                                <td style="text-align:right;"><span class="h2_login">Senha:</span></td>
-                                                <td><input type="password" id="inputSenha" name="senha" placeholder="Insira a sua senha" required="required"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>                                                        
-                                                </td>
-                                                <td id="invalidAttempt">
-                                                    
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <div>
+                                    <div id="table"> 
+                                    
+                                    </div>
+                                    
+                                        <div id="ref">
                                             <button id="loginButton" class="buttons" onclick="">Logar</button>
                                             <!--<input type="submit" value="Logar" class="buttons">-->
                                         </div>
@@ -132,6 +121,35 @@
             document.getElementById("loginButton").addEventListener("click", function () {
                 attemptToLogIn(document.getElementById("inputName").value, document.getElementById("inputSenha").value);
             });
+            
+            var template = '<table class="{{classe}}"> {{#trs}} <tr> <td style="{{estiloTD}}"> <span class="{{classeSpan}}"> {{campo}} </span> </td> <td> <input type="{{inputTipo}}" id="{{inputID}}" name="{{inputNome}}" placeholde="{{inputPlace}}" requerid="{{inputReque}}"> </td> </tr> {{/trs}} </table>';
+
+            var data =  {
+              "classe" : "loginTable",
+              "trs" : [
+                  { "estiloTD" : "text-align:right;",
+                    "classeSpan" : "h2_login",
+                    "campo" : "Usuário",
+                    "inputTipo": "text",
+                    "inputID": "inputName",
+                    "inputNome": "login",
+                    "inputPlace": "Insira o seu login",
+                    "inputReque": "required"},
+
+                 {  "estiloTD" : "text-align:right;",
+                    "classeSpan" : "h2_login",
+                    "campo" : "Senha",
+                    "inputTipo": "password",
+                    "inputID": "inputSenha",
+                    "inputNome": "senha",
+                    "inputPlace": "Insira a sua senha",
+                    "inputReque": "required"}
+              ]
+            };
+            var result = Mustache.render(template,data);
+            document.getElementById("table").innerHTML = result;
+            
         </script>>
+        
     </body>
 </html>
