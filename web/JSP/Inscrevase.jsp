@@ -11,6 +11,16 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="CSS/inscrevase.css">
+        <script type="text/javascript" src="JS/verificaCampoNomeInscrevase_mini.js"></script>
+        <script type="text/javascript" src="JS/verificaCampoEmailInscrevase_mini.js"></script>
+        <script type="text/javascript" src="JS/verificaCampoLoginInscrevase_mini.js"></script>
+        <script type="text/javascript" src="JS/verificaCampoSenhaInscrevase_mini.js"></script>
+        <script type="text/javascript" src="JS/verificaCampoEstadoInscrevase_mini.js"></script>
+        <script type="text/javascript" src="JS/verificaCampoCidadeInscrevase_mini.js"></script>
+        <script type="text/javascript" src="JS/verificaCampoBairroInscrevase_mini.js"></script>
+        <script type="text/javascript" src="JS/verificaCampoRuaInscrevase_mini.js"></script>
+        <script type="text/javascript" src="JS/verificaCampoNumeroInscrevase_mini.js"></script>
+        <script type="text/javascript" src="JS/attempToRegister_mini.js"></script>
         <title>Login</title>
     </head>
     <body>
@@ -191,288 +201,45 @@
 	</div>
         <script type="text/javascript">
             document.getElementById("buttonSubmit").addEventListener("click", function (){
-                var nome  = document.getElementById("inputName").value;
-                var email = document.getElementById("inputEmail").value;
-                var login = document.getElementById("inputLogin").value;
-                var senha = document.getElementById("inputSenha").value;
-                var estado = document.getElementById("inputEstado").value;
-                var cidade = document.getElementById("inputCidade").value;
-                var bairro = document.getElementById("inputBairro").value;
-                var rua = document.getElementById("inputRua").value;
-                var numero = document.getElementById("inputNumero").value;
-                var parameters = "nome="+nome+"&email="+email+"&login="+login+"&senha="+senha+"&estado="+estado+"&cidade="+cidade+"&bairro="+bairro+"&rua="+rua+"&numero="+numero;
-                var xmlhttp;
-                if (window.XMLHttpRequest){ 
-                    xmlhttp = new XMLHttpRequest();} 
-                else{ 
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                } 
-                xmlhttp.open("POST","Inscrevase",true); 
-                xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded;charset=UTF-8");
-                xmlhttp.onreadystatechange = function (){
-                    if(this.readyState === 4 && this.status === 200){
-                        var obj = JSON.parse(this.responseText);
-                        if (obj.result === "false"){
-                            document.getElementById("labelInvalid").innerHTML = obj.erro;
-                        } else {           
-                            window.location.href = obj.url;
-                        }
-                    }
-                };
-                xmlhttp.send(parameters); 
+                attempToRegister();
             });
             
             
             document.getElementById("inputName").onblur = function (){
-                var elementValue = document.getElementById("inputName").value;
-                var xmlhttp;
-                if (window.XMLHttpRequest){ 
-                    xmlhttp = new XMLHttpRequest();} 
-                else{ 
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                } 
-                xmlhttp.open("GET","validaInscrevase?nome="+elementValue,true); 
-                xmlhttp.onreadystatechange = function (){
-                    if(this.readyState === 4 && this.status === 200){
-                        var obj = JSON.parse(this.responseText);
-                        var buttonSubmit = document.getElementById("buttonSubmit");
-                        
-                        if (obj.result === "false"){
-                            document.getElementById("invalidName").innerHTML = "";
-                            document.getElementById("invalidName").innerHTML = obj.erro;
-                            document.getElementById("inputName").valid = false;
-                        } else if(obj.result === "true"){
-                            document.getElementById("invalidName").innerHTML = "";
-                            document.getElementById("inputName").valid = true;
-                        }
-                        buttonSubmit.disabled = !isValid();
-                    }
-                };
-                xmlhttp.send(null); 
+                verificaCampoNomeInscrevase();
             };
 
             document.getElementById("inputEmail").onblur = function (){
-                var elementValue = document.getElementById("inputEmail").value;
-                var xmlhttp;
-                if (window.XMLHttpRequest){ 
-                    xmlhttp = new XMLHttpRequest();} 
-                else{ 
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                } 
-                xmlhttp.open("GET","validaInscrevase?email="+elementValue,true); 
-                xmlhttp.onreadystatechange = function (){
-                    if(this.readyState === 4 && this.status === 200){
-                        var obj = JSON.parse(this.responseText);
-                        var buttonSubmit = document.getElementById("buttonSubmit");
-                        
-                        if (obj.result === "false"){
-                            document.getElementById("invalidEmail").innerHTML = "";
-                            document.getElementById("invalidEmail").innerHTML = obj.erro;
-                            document.getElementById("inputEmail").valid = false;
-                        } else if(obj.result === "true"){           
-                            document.getElementById("invalidEmail").innerHTML = "";
-                            document.getElementById("inputEmail").valid = true;
-                        }
-                        buttonSubmit.disabled = !isValid();
-                    }
-                };
-                xmlhttp.send(null); 
+              verificaCampoEmailInscrevase();
             };
             
             document.getElementById("inputLogin").onblur = function (){
-                var elementValue = document.getElementById("inputLogin").value;
-                var xmlhttp;
-                if (window.XMLHttpRequest){ 
-                    xmlhttp = new XMLHttpRequest();} 
-                else{ 
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                } 
-                xmlhttp.open("GET","validaInscrevase?login="+elementValue,true); 
-                xmlhttp.onreadystatechange = function (){
-                    if(this.readyState === 4 && this.status === 200){
-                        var obj = JSON.parse(this.responseText);
-                        var buttonSubmit = document.getElementById("buttonSubmit");
-                        
-                        if (obj.result === "false"){
-                            document.getElementById("invalidLogin").innerHTML = "";
-                            document.getElementById("invalidLogin").innerHTML = obj.erro;
-                            document.getElementById("inputLogin").valid = false;
-                        } else if(obj.result === "true"){           
-                            document.getElementById("invalidLogin").innerHTML = "";
-                            document.getElementById("inputLogin").valid = true;
-                        }
-                        buttonSubmit.disabled = !isValid();
-                    }
-                };
-                xmlhttp.send(null); 
+                verificaCampoLoginInscrevase();
             };
             
             document.getElementById("inputSenha").onblur = function (){
-                var elementValue = document.getElementById("inputSenha").value;
-                var xmlhttp;
-                if (window.XMLHttpRequest){ 
-                    xmlhttp = new XMLHttpRequest();} 
-                else{ 
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                } 
-                xmlhttp.open("GET","validaInscrevase?senha="+elementValue,true); 
-                xmlhttp.onreadystatechange = function (){
-                    if(this.readyState === 4 && this.status === 200){
-                        var obj = JSON.parse(this.responseText);
-                        var buttonSubmit = document.getElementById("buttonSubmit");
-                        
-                        if (obj.result === "false"){
-                            document.getElementById("invalidSenha").innerHTML = "";
-                            document.getElementById("invalidSenha").innerHTML = obj.erro;
-                            document.getElementById("inputSenha").valid = false;
-                        } else if(obj.result === "true"){           
-                            document.getElementById("invalidSenha").innerHTML = "";
-                            document.getElementById("inputSenha").valid = true;
-                        }
-                        buttonSubmit.disabled = !isValid();
-                    }
-                };
-                xmlhttp.send(null); 
+                verificaCampoSenhaInscrevase();
             };
             
             document.getElementById("inputEstado").onblur = function (){
-                var elementValue = document.getElementById("inputEstado").value;
-                var xmlhttp;
-                if (window.XMLHttpRequest){ 
-                    xmlhttp = new XMLHttpRequest();} 
-                else{ 
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                } 
-                xmlhttp.open("GET","validaInscrevase?estado="+elementValue,true); 
-                xmlhttp.onreadystatechange = function (){
-                    if(this.readyState === 4 && this.status === 200){
-                        var obj = JSON.parse(this.responseText);
-                        var buttonSubmit = document.getElementById("buttonSubmit");
-                        
-                        if (obj.result === "false"){
-                            document.getElementById("invalidEstado").innerHTML = "";
-                            document.getElementById("invalidEstado").innerHTML = obj.erro;
-                            document.getElementById("inputEstado").valid = false;
-                        } else if(obj.result === "true"){           
-                            document.getElementById("invalidEstado").innerHTML = "";
-                            document.getElementById("inputEstado").valid = true;
-                        }
-                        buttonSubmit.disabled = !isValid();
-                    }
-                };
-                xmlhttp.send(null); 
+                verificaCampoEstadoInscrevase();
             };
             
             document.getElementById("inputCidade").onblur = function (){
-                var elementValue = document.getElementById("inputCidade").value;
-                var xmlhttp;
-                if (window.XMLHttpRequest){ 
-                    xmlhttp = new XMLHttpRequest();} 
-                else{ 
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                } 
-                xmlhttp.open("GET","validaInscrevase?cidade="+elementValue,true); 
-                xmlhttp.onreadystatechange = function (){
-                    if(this.readyState === 4 && this.status === 200){
-                        var obj = JSON.parse(this.responseText);
-                        var buttonSubmit = document.getElementById("buttonSubmit");
-                        
-                        if (obj.result === "false"){
-                            document.getElementById("invalidCidade").innerHTML = "";
-                            document.getElementById("invalidCidade").innerHTML = obj.erro;
-                            document.getElementById("inputCidade").valid = false;
-                        } else if(obj.result === "true"){           
-                            document.getElementById("invalidCidade").innerHTML = "";
-                            document.getElementById("inputCidade").valid = true;
-                        }
-                        buttonSubmit.disabled = !isValid();
-                    }
-                };
-                xmlhttp.send(null); 
+                verificaCampoCidadeInscrevase();
             };
             
-            document.getElementById("inputBairro").onblur = function (){
-                var elementValue = document.getElementById("inputBairro").value;
-                var xmlhttp;
-                if (window.XMLHttpRequest){ 
-                    xmlhttp = new XMLHttpRequest();} 
-                else{ 
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                } 
-                xmlhttp.open("GET","validaInscrevase?bairro="+elementValue,true); 
-                xmlhttp.onreadystatechange = function (){
-                    if(this.readyState === 4 && this.status === 200){
-                        var obj = JSON.parse(this.responseText);
-                        var buttonSubmit = document.getElementById("buttonSubmit");
-                        
-                        if (obj.result === "false"){
-                            document.getElementById("invalidBairro").innerHTML = "";
-                            document.getElementById("invalidBairro").innerHTML = obj.erro;
-                            document.getElementById("inputBairro").valid = false;
-                        } else if(obj.result === "true"){           
-                            document.getElementById("invalidBairro").innerHTML = "";
-                            document.getElementById("inputBairro").valid = true;
-                        }
-                        buttonSubmit.disabled = !isValid();
-                    }
-                };
-                xmlhttp.send(null); 
+            
+            document.getElementById("inputBairro").onblur = function(){
+                verificaCampoBairroInscrevase();
             };
             
             document.getElementById("inputRua").onblur = function (){
-                var elementValue = document.getElementById("inputRua").value;
-                var xmlhttp;
-                if (window.XMLHttpRequest){ 
-                    xmlhttp = new XMLHttpRequest();} 
-                else{ 
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                } 
-                xmlhttp.open("GET","validaInscrevase?rua="+elementValue,true); 
-                xmlhttp.onreadystatechange = function (){
-                    if(this.readyState === 4 && this.status === 200){
-                        var obj = JSON.parse(this.responseText);
-                        var buttonSubmit = document.getElementById("buttonSubmit");
-                        
-                        if (obj.result === "false"){
-                            document.getElementById("invalidRua").innerHTML = "";
-                            document.getElementById("invalidRua").innerHTML = obj.erro;
-                            document.getElementById("inputRua").valid = false;
-                        } else if(obj.result === "true"){           
-                            document.getElementById("invalidRua").innerHTML = "";
-                            document.getElementById("inputRua").valid = true;
-                        }
-                        buttonSubmit.disabled = !isValid();
-                    }
-                };
-                xmlhttp.send(null); 
+                verificaCampoRuaInscrevase();
             };
             
             document.getElementById("inputNumero").onblur = function (){
-                var elementValue = document.getElementById("inputNumero").value;
-                var xmlhttp;
-                if (window.XMLHttpRequest){ 
-                    xmlhttp = new XMLHttpRequest();} 
-                else{ 
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                } 
-                xmlhttp.open("GET","validaInscrevase?numero="+elementValue,true); 
-                xmlhttp.onreadystatechange = function (){
-                    if(this.readyState === 4 && this.status === 200){
-                        var obj = JSON.parse(this.responseText);
-                        var buttonSubmit = document.getElementById("buttonSubmit");
-                        
-                        if (obj.result === "false"){
-                            document.getElementById("invalidNumero").innerHTML = "";
-                            document.getElementById("invalidNumero").innerHTML = obj.erro;
-                            document.getElementById("inputNumero").valid = false;
-                        } else if(obj.result === "true"){           
-                            document.getElementById("invalidNumero").innerHTML = "";
-                            document.getElementById("inputNumero").valid = true;
-                        }
-                        buttonSubmit.disabled = !isValid();
-                    }
-                };
-                xmlhttp.send(null); 
+                verificaCampoNumeroInscrevase();
             };
             
             /*function validateFields(elementName, elementID){

@@ -18,8 +18,8 @@ import java.sql.Statement;
 public class UsuarioDAO {
     private Connection con;
     private PreparedStatement ppst;
-    private final String username = "murilo";
-    private final String password = "murilo";
+    private final String username = "postgres";
+    private final String password = "0";
     public boolean logar(String login, String senha){
         try{
             Class.forName("org.postgresql.Driver");

@@ -66,13 +66,19 @@ public class validaInscrevase extends HttpServlet {
             if(request.getParameter("email") != null && userDao.verificaUnique("email",request.getParameter("email"))) {
                 response.getWriter().write("{\"erro\":\"Email já utilizado\",\"result\":\"false\"}");
                 response.getWriter().flush();
+            } else if(request.getParameter("email") != null && request.getParameter("email").equals("")){
+                response.getWriter().write("{\"erro\":\"Email vazio\",\"result\":\"false\"}");
+                response.getWriter().flush();
+            } else if(request.getParameter("login") != null && request.getParameter("login").equals("")){
+                response.getWriter().write("{\"erro\":\"Login já vazio\",\"result\":\"false\"}");
+                response.getWriter().flush();
             } else if(request.getParameter("login") != null && userDao.verificaUnique("login", request.getParameter("login"))){
                 response.getWriter().write("{\"erro\":\"Login já utilizado\",\"result\":\"false\"}");
                 response.getWriter().flush();
-            }else if(request.getParameter("nome") != null && (request.getParameter("nome").equals(""))){
+            } else if(request.getParameter("nome") != null && (request.getParameter("nome").equals(""))){
                 response.getWriter().write("{\"erro\":\"Nome vazio\",\"result\":\"false\"}");
                 response.getWriter().flush();
-            } else if(request.getParameter("senha") != null && request.getParameter("senha").length() <=8){
+            } else if(request.getParameter("senha") != null && request.getParameter("senha").length() <8){
                 response.getWriter().write("{\"erro\":\"Senha menor que 8 digitos\",\"result\":\"false\"}");
                 response.getWriter().flush();
             } else if(request.getParameter("estado") != null && request.getParameter("estado").equals("")){
