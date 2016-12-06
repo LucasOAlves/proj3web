@@ -18,8 +18,8 @@ import java.sql.Statement;
 public class UsuarioDAO {
     private Connection con;
     private PreparedStatement ppst;
-    private final String username = "postgres";
-    private final String password = "0";
+    private final String username = "murilo";
+    private final String password = "murilo";
     public boolean logar(String login, String senha){
         try{
             Class.forName("org.postgresql.Driver");
@@ -93,16 +93,13 @@ public class UsuarioDAO {
         try{
             Class.forName("org.postgresql.Driver");
             con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/proj2web", username, password);
-            String sql = "SELECT * FROM data WHERE login LIKE ? ;";
+            String sql = "SELECT * FROM data WHERE login LIKE ? ORDER BY id DESC;";
             ppst = con.prepareStatement(sql);
             ppst.setString(1, user);
             ResultSet rs = ppst.executeQuery();
-            String lastId=null;
-            while(rs.next()){
-                lastId = rs.getInt("id")+"";
-            }
+            rs.next();
             con.close();
-            return lastId;
+            return rs.getInt("id")+"";
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -206,8 +203,6 @@ public class UsuarioDAO {
                     } else if(rs.getString("type").split("/")[0].equals("video")){
                         out += "<td>";
                             out += "<a href=\""+rs.getString("file")+"\"><img src=\"uploads/videoStandardLogo.png\" alt=\""+rs.getString("description")+"\" class=\"thumbnail\"/></a>";
-                            //out += "<iframe src=\""+rs.getString("file")+"\" class=\"videoPlayer\"></iframe>";
-                        //out += "</td><td><a href=\""+rs.getString("file")+"\"><button type=\"button\" id=\"fullScreenButton\">Full Screen</button></a></td>";
                         out += "</td>";
                     }                    
                     out += "</tr>";
