@@ -149,6 +149,8 @@
             var result = Mustache.render(template,data);
             document.getElementById("table").innerHTML = result;
             
+            
+            
         </script>>
         
     </body>

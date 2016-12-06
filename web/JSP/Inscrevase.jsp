@@ -121,7 +121,7 @@
                                             </tr>
                                         </table>
                                         <span class="centerBox">
-                                            <input type="submit" value="Cadastrar" class="buttons" id="buttonSubmit">
+                                            <input type="button" value="Cadastrar" class="buttons" id="buttonSubmit">
                                             <input type="reset" value="Limpar" class="buttons">
                                             <a href="Login"><button type="button" class="buttons">Cancelar</button></a>
                                         </span>
